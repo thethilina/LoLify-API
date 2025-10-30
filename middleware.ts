@@ -22,6 +22,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/comments/protected/:path*", "/api/users/protected/:path*" , "/api/memes/protected/:path*" , "/api/friend_request/:path*" ,  "/api/battleRequest/:path*"], 
+  matcher: ["/api/comments/protected/:path*", "/api/users/protected/:path*" , "/api/memes/protected/:path*" , "/api/friend_request/:path*" ,  "/api/battleRequest/:path*" , "/api/battle/:path*"], 
    runtime: "nodejs",
 };
