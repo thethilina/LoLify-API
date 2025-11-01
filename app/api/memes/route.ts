@@ -32,8 +32,6 @@ return new NextResponse(JSON.stringify(memes) , {status:200})
 
 }
 
-
-
 }
 
 

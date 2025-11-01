@@ -6,7 +6,7 @@ import connect from "@/lib/db";
 import { Types } from "mongoose";
 import { request } from "http";
 
-
+//creating battle request api
 export const POST = async (request:Request) => {
 try {
 
@@ -60,5 +60,45 @@ try {
     return new NextResponse(
         JSON.stringify({message:"Error in creating battle request!"}),{status:500}
         );
+    }
+}
+//fetch all battle requests
+
+export const GET = async (request:Request) => {
+    try {
+        const {searchParams} = new URL(request.url);
+        const userId = searchParams.get("userId");
+
+        if(!userId){
+            return new NextResponse(
+                JSON.stringify({message:"Invalid userId"}),{status:400}
+            );
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(userId)){
+            return new NextResponse(
+                JSON.stringify({message:"User Not Found!"}),{status:404}
+            );
+        }
+        
+
+        await connect();
+
+        const userObjetcId = new mongoose.Types.ObjectId(userId);
+
+        const requests = await BattleRequest.find({
+            $or : [{user_id_by: userObjetcId},{user_id_to: userObjetcId}],
+        })
+
+        return new NextResponse(
+            JSON.stringify({requests}),{status:200}
+        )
+
+    } catch (e:any) {
+        console.error("Error fetching battle requests:", e);
+        return new NextResponse(
+                JSON.stringify({message:"Error Fetching Battle Requests!",error:e.message}),{status:500}
+            );
+        
     }
 }

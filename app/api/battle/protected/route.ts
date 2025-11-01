@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 import connect from "@/lib/db";
 import { Savate } from "next/font/google";
+import { headers } from "next/headers";
 
 
 //battle create
@@ -80,3 +81,47 @@ try {
         );
     }   
 }
+
+//Fetching all the battle form a user
+
+export const GET = async (request:Request) => {
+    try {
+        await connect();
+
+        const {searchParams} = new URL(request.url);
+        const userId = searchParams.get("userId");
+
+        if(!userId){
+            return new NextResponse(
+                JSON.stringify({message:"User is required"}),{status:400}
+            );
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(userId)){
+            return new NextResponse(
+                JSON.stringify({message:"userId Not found!"}),{status:404}
+            );
+        } 
+
+        
+        //getting battles from related users
+        const battle = await Battle.find({
+            $or : [{user_id_by : userId} , {user_id_to : userId}],
+        })
+
+        if(!battle || battle.length === 0){
+            return new NextResponse(
+                JSON.stringify({message:"No Battle  found for this user!"}),{status:404}
+            );
+        }
+        return new NextResponse(
+            JSON.stringify({message:"Battles found!", data:battle}),{status:200}
+        );
+
+    } catch (e:any) {
+        return new NextResponse(
+            JSON.stringify({message:"Error in Fetching all the Battles!",error:e.message}),{status:500}
+        );
+    }
+}
+
