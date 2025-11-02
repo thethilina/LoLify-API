@@ -3,8 +3,6 @@ import Battle from "@/lib/models/battle";
 import { NextResponse } from "next/server"
 
 
-
-
 export const PATCH = async (request:Request) => {
     try {
         await connect();
