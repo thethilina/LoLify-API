@@ -8,9 +8,7 @@ const memeSchema = new Schema (
     likecount: [{type: mongoose.Schema.Types.ObjectId , ref: "User" } ],
     dislikecount: [{type: mongoose.Schema.Types.ObjectId , ref: "User" } ],
     memeimg :{type:String  , required : true },
-    userid :{type: mongoose.Schema.Types.ObjectId , ref: "User" ,required : true  } 
-
-
+    userid :{type: mongoose.Schema.Types.ObjectId , ref: "User" ,required : true  } ,
 
 },{
 
