@@ -10,10 +10,9 @@ const userSchema = new Schema (
     avatar : {type:String  , required : true },
     coverphoto : {type: String , required : true },
     orbs : {type: Number , required: true},
-    friends :[{type: mongoose.Schema.Types.ObjectId , ref: "User" } ]
-
-
-
+    friends :[{type: mongoose.Schema.Types.ObjectId , ref: "User" } ],
+//uttoo ! i add the status here for make change for reported user
+    status : {type:String , default:"active"}
 
 
 
