@@ -88,7 +88,7 @@ export const setnotifi = async (
         return NextResponse.json({success:true, data:newnotifi}, {status:201})
 
     } catch(e:any) {
-        return new NextResponse("Error sending notification", {status:500})
+        return new NextResponse("Error sending notification" + e.message, {status:500})
         
     }
 }

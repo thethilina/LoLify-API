@@ -8,7 +8,9 @@ import connect from "@/lib/db";
 
 export const PATCH = async (request: Request) => {
   try {
-    const time = new Date();
+const now = new Date()
+const slString = now.toLocaleString("en-US", { timeZone: "Asia/Colombo" })
+const time = new Date(slString)
 
     await connect();
 
