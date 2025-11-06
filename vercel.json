@@ -1,11 +1,9 @@
-
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     {
       "path": "/api/battlemanage",
-        "schedule": "0 0 * * *",
-        "timezone": "Asia/Colombo"
+      "schedule": "30 6 * * *"
     }
   ]
 }
