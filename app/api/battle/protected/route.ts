@@ -33,6 +33,7 @@ try {
             );
         }
 
+        await connect();
 
             const battlereq = await BattleRequest.findById(battlerequestid);
 
@@ -41,16 +42,43 @@ try {
                     JSON.stringify({message:"Battle Request not found!"}),{status:404}
                 );
             }
+            
+            const now = new Date();
+
+            
+            const slString = now.toLocaleString("en-US", { timeZone: "Asia/Colombo" });
+
+            
+            const slDate = new Date(slString);
+            
+                        
+            var enddate: Date = new Date(slDate)
+
+                if (battlereq.timediruation  === "1d") {
+                    enddate = new Date(enddate.getTime() + 1 * 24 * 60 * 60 * 1000);
+                    console.log("dawasai")
+                }
+
+                if (battlereq.timediruation === "7d") {
+                    enddate = new Date(enddate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    console.log("dawas 7i")
+                }
+
+                if (battlereq.timediruation === "30d") {
+                    enddate = new Date(enddate.getTime() + 30 * 24 * 60 * 60 * 1000);
+                    console.log("dawas 30")
+                }
+
 
             const battledata = {
                 "user_id_by" : battlereq.user_id_by.toString(),
                 "user_id_to" : battlereq.user_id_to.toString(),
-                "startedTime" : new Date(),
-                "status" : "ongoing"
+                "startedTime" : slDate,
+                "timediruation" : battlereq.timediruation,
+                "endTime": enddate
             }
 
-            await connect();
-
+            
             const newBattle = new Battle(battledata);
 
             await newBattle.save();

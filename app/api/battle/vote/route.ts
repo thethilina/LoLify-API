@@ -2,7 +2,7 @@ import { request } from "http";
 import { NextResponse } from "next/server";
 import connect from "@/lib/db";
 import Battle from "@/lib/models/battle";
-
+import { setnotifi } from "@/lib/models/notifications";
 
 
 
@@ -24,7 +24,8 @@ export const POST = async (request:Request) => {
 
         const battle = await Battle.findById(battleId);
         console.log(battleId)
-
+        const notifi = await setnotifi(battle.user_id_by.toString() , voterId, "vote" , battleId)
+        console.log(notifi)
         if(!battle){
             return new NextResponse(
                 JSON.stringify({message:"battle Not Found"}),{status:404}
@@ -52,6 +53,8 @@ export const POST = async (request:Request) => {
 
         await battle.save();
 
+        
+        console.log("hto")
 
 
         return new NextResponse(

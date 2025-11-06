@@ -9,7 +9,7 @@ const notifiSchema = new Schema(
 {
     touser:{type: mongoose.Schema.Types.ObjectId , ref: "User" },
     auser:{type: mongoose.Schema.Types.ObjectId , ref: "User" },
-    type:{type:String ,  enum:['like' , 'comment' , 'challengeReq'  ,'challengeAcc', 'battleend' , 'friendReq' , 'friendReqAcc'    ] , required:true},
+    type:{type:String ,  enum:['like' , 'comment' , 'challengeReq'  ,'challengeAcc', 'battleend' , 'friendReq' , 'friendReqAcc' ,'vote'   ] , required:true},
     status:{type:String ,  enum:['toShow' , 'viewed'] , default:'toShow' },
     memeid:{type: mongoose.Schema.Types.ObjectId , ref: "Meme" },
     battleid:{type: mongoose.Schema.Types.ObjectId , ref: "Battle" },
@@ -29,7 +29,7 @@ const Notification = models.Notification || model('Notification' , notifiSchema)
 export const setnotifi = async (
     touser: String,
     auser: String,
-    type: 'like' | 'comment' | 'challengeReq' | 'challengeAcc' | 'battleend' | 'friendReq' | 'friendReqAcc',
+    type: 'like' | 'comment' | 'challengeReq' | 'challengeAcc' | 'battleend' | 'friendReq' | 'friendReqAcc' |'vote' ,
     id?: String
 ) => {
     try {
@@ -74,6 +74,11 @@ export const setnotifi = async (
             if (!id) return new NextResponse("friendReqid required", {status:400})
             body = `${username} accepted your friend request`
             notification.friendReqid = id
+
+        }else if (type ==="vote") {
+            if (!id) return new NextResponse("friendReqid required", {status:400})
+            body = `${username} voted for you.`
+            notification.battleid = id
         }
 
         notification.body = body
@@ -84,6 +89,7 @@ export const setnotifi = async (
 
     } catch(e:any) {
         return new NextResponse("Error sending notification", {status:500})
+        
     }
 }
 

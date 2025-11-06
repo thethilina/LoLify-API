@@ -12,6 +12,11 @@ export const GET = async (request : Request)=> {
 
 try{
 
+    const nowUTC = new Date();
+const SL_Time = new Date(nowUTC.getTime() + (5.5 * 60 * 60 * 1000));
+
+console.log(SL_Time);
+
 const {searchParams} = new URL(request.url);
 const  page : any = parseInt(searchParams.get('page') || "1");
 const  limit : any = parseInt(searchParams.get('limit') || "10");    

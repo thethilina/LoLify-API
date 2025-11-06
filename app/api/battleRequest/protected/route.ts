@@ -23,6 +23,7 @@ try {
     
 
     const {user_id_by , user_id_to} = body;
+    console.log(body)
 
         if(!user_id_by || !user_id_to){
             return new NextResponse(
@@ -47,10 +48,12 @@ try {
             );
         }
 
+        
         await connect();
 
         const newbattlerequest = new BattleRequest(body);
 
+        console.log(newbattlerequest)
         await newbattlerequest.save();
 
 
