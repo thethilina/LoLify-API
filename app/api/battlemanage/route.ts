@@ -6,7 +6,7 @@ import { setnotifi } from "@/lib/models/notifications";
 import connect from "@/lib/db";
 
 
-export const PATCH = async (request: Request) => {
+export const GET = async (request: Request) => {
   try {
 const now = new Date()
 const slString = now.toLocaleString("en-US", { timeZone: "Asia/Colombo" })
