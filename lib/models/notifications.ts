@@ -22,13 +22,15 @@ const notifiSchema = new Schema(
 }
 )
 
+
+
 const Notification = models.Notification || model('Notification' , notifiSchema)
 
 export const setnotifi = async (
-    touser: mongoose.Types.ObjectId,
-    auser: mongoose.Types.ObjectId,
+    touser: String,
+    auser: String,
     type: 'like' | 'comment' | 'challengeReq' | 'challengeAcc' | 'battleend' | 'friendReq' | 'friendReqAcc',
-    id?: mongoose.Types.ObjectId
+    id?: String
 ) => {
     try {
         await connect()
@@ -75,7 +77,9 @@ export const setnotifi = async (
         }
 
         notification.body = body
-        const newnotifi = await Notification.create(notification)
+        const newnotifi = new Notification(notification)
+        await newnotifi.save()
+
         return NextResponse.json({success:true, data:newnotifi}, {status:201})
 
     } catch(e:any) {

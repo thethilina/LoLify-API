@@ -4,6 +4,9 @@ import User from "@/lib/models/users";
 import Frequest from "@/lib/models/FriendRequest";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
+import Notification from "@/lib/models/notifications";
+import { setnotifi } from "@/lib/models/notifications";
+
 
 export const GET = async (request : Request) => {
 
@@ -139,11 +142,15 @@ const newreq = new Frequest(
 
 await newreq.save();
 
+const newnotifi = setnotifi( touserId, byuserId , "friendReq" ,  newreq._id )
+
 
 if(!newreq){
     return new NextResponse(JSON.stringify({message:"Error sending request"}) , {status:400});
 
 }
+
+
 
 return new NextResponse(JSON.stringify({Friend_request:newreq}) , {status:200})
 
