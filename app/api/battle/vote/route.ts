@@ -8,10 +8,10 @@ import Battle from "@/lib/models/battle";
 
 export const POST = async (request:Request) => {
     try {
-        await connect();
+       
         
         const {battleId , voterId , voteFor} = await request.json();
-
+        
 
 
         if(!battleId || !voterId || !voteFor){
@@ -20,7 +20,10 @@ export const POST = async (request:Request) => {
             );
         }
 
+        await connect();
+
         const battle = await Battle.findById(battleId);
+        console.log(battleId)
 
         if(!battle){
             return new NextResponse(
