@@ -1,7 +1,7 @@
 import connect from "@/lib/db"
 import Battle from "@/lib/models/battle";
 import { NextResponse } from "next/server"
-
+import { setnotifi } from "@/lib/models/notifications";
 
 export const PATCH = async (request:Request) => {
     try {

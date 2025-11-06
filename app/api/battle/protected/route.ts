@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import connect from "@/lib/db";
 import { Savate } from "next/font/google";
 import { headers } from "next/headers";
-
+import { setnotifi } from "@/lib/models/notifications";
 
 //battle create
 export const POST = async (request:Request) => {
@@ -68,6 +68,8 @@ try {
                     JSON.stringify({message:"Error inn deleting battle request!"}),{status:400}
                 );
             }
+
+            await   setnotifi(battlereq.user_id_by.toString(), battlereq.user_id_to.toString() , "challengeAcc", newBattle._id.toString() )
 
             //Battle starting successfully
             return new NextResponse(

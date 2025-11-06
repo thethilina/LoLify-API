@@ -228,6 +228,12 @@ if(!updatedtouser || !updatedbyuser){
 
 const deletedreqest = await Frequest.findByIdAndDelete(requestId);
 
+    
+await setnotifi(frequest.byuserid.toString() ,frequest.touserid.toString() , "friendReqAcc", requestId)
+
+
+
+
 if(!deletedreqest){
 
      return new NextResponse(JSON.stringify({message:"Error deleting request" } ) ,{status:400})

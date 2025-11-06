@@ -5,6 +5,8 @@ import BattleRequest from "@/lib/models/battleRequest";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
 import { request } from "http";
+import { setnotifi } from "@/lib/models/notifications";
+
 
 //creating battle request api
 export const POST = async (request:Request) => {
@@ -50,6 +52,10 @@ try {
         const newbattlerequest = new BattleRequest(body);
 
         await newbattlerequest.save();
+
+
+        await setnotifi(user_id_to, user_id_by, "challengeReq" , newbattlerequest._id.toString())
+
 
         return new NextResponse(JSON.stringify({message:"New Battle Request sent Successfully!",
             battleRequest : newbattlerequest}),

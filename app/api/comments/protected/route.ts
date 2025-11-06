@@ -5,7 +5,7 @@ import User from "@/lib/models/users";
 import Comment from "@/lib/models/comment";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
-
+import { setnotifi } from "@/lib/models/notifications";
 
 
 export const POST = async (request : Request) => {
@@ -86,6 +86,7 @@ if(!newcomment){
     return new NextResponse("Error posting comment" , {status:400})
 }
 
+await setnotifi(meme.userid.toString(), loggeduserid , "comment" , memeId )
 
 return new NextResponse(JSON.stringify({newcomment}) , {status:200})
 
