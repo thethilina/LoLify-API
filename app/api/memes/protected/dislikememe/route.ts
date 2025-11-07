@@ -4,6 +4,8 @@ import Meme from "@/lib/models/meme";
 import User from "@/lib/models/users";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
+import { setnotifi } from "@/lib/models/notifications";
+
 
 export const PATCH = async(request : Request) => {
 
@@ -67,6 +69,8 @@ if(!updatedmeme){
     
 return new NextResponse(JSON.stringify({message:"Error DisLiking meme: "  }) , {status:400})
 }
+
+await setnotifi(meme.userid.toString(), userId, 'dislike', memeId)
 
 return new NextResponse(JSON.stringify({meme:updatedmeme}) , {status:200})
 

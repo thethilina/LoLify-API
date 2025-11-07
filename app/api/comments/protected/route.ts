@@ -11,9 +11,9 @@ import { setnotifi } from "@/lib/models/notifications";
 export const POST = async (request : Request) => {
 
 try{
+const body = await request.json();
+const {userid ,memeid} = body;
 
-const {searchParams} =  new URL(request.url);
-const memeId = searchParams.get("memeId");
 const loggeduserid = request.headers.get("loggeduserid")
 
 
@@ -25,13 +25,13 @@ if(!loggeduserid){
 
 
 
-if(!memeId ){
+if(!memeid ){
 
   return new NextResponse('Meme id not found' , {status:400})
 
 }
 
-if(!mongoose.Types.ObjectId.isValid(memeId) ){
+if(!mongoose.Types.ObjectId.isValid(memeid) ){
 
    return new NextResponse('Meme id  is not valid' , {status:400})
 }
@@ -39,7 +39,7 @@ if(!mongoose.Types.ObjectId.isValid(memeId) ){
 
 await connect();
 
-const meme = await Meme.findById(memeId);
+const meme = await Meme.findById(memeid);
 
 
 if(!meme ){
@@ -48,9 +48,6 @@ if(!meme ){
 }
 
 
-
-const body = await request.json();
-const {userid} = body;
 
 
 
@@ -86,7 +83,7 @@ if(!newcomment){
     return new NextResponse("Error posting comment" , {status:400})
 }
 
-await setnotifi(meme.userid.toString(), loggeduserid , "comment" , memeId )
+await setnotifi(meme.userid.toString(), loggeduserid , "comment" , memeid )
 
 return new NextResponse(JSON.stringify({newcomment}) , {status:200})
 

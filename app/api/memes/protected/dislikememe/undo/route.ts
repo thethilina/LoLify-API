@@ -4,6 +4,9 @@ import Meme from "@/lib/models/meme";
 import User from "@/lib/models/users";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
+import { setnotifi } from "@/lib/models/notifications";
+
+
 
 export const PATCH = async(request : Request) => {
 
@@ -12,6 +15,8 @@ try{
 const {searchParams} = new URL(request.url);
 const memeId = searchParams.get("memeId");
 const userId = searchParams.get("userId")
+const loggeduserid = request.headers.get("loggeduserid");
+
 
 if(!userId|| userId  === ""){
 
@@ -33,6 +38,13 @@ if(!mongoose.Types.ObjectId.isValid(memeId)){
     return new NextResponse(JSON.stringify({message:"memeId isnt valid"}) , {status:400})
 }
 
+ if(loggeduserid !== userId){
+        return new NextResponse(
+            JSON.stringify({message:"Invalid user"}),{status:400}
+        );
+    }
+
+    
 await connect();
 
 const meme = await Meme.findById(memeId);
@@ -60,6 +72,7 @@ if(!updatedmeme){
     
 return new NextResponse(JSON.stringify({message:"Error undoDisLiking meme: "  }) , {status:400})
 }
+
 
 return new NextResponse(JSON.stringify({meme:updatedmeme}) , {status:200})
 

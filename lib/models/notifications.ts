@@ -9,7 +9,7 @@ const notifiSchema = new Schema(
 {
     touser:{type: mongoose.Schema.Types.ObjectId , ref: "User" },
     auser:{type: mongoose.Schema.Types.ObjectId , ref: "User" },
-    type:{type:String ,  enum:['like' , 'comment' , 'challengeReq'  ,'challengeAcc', 'battleend' , 'friendReq' , 'friendReqAcc' ,'vote'   ] , required:true},
+    type:{type:String ,  enum:['like' , 'comment' , 'challengeReq'  ,'challengeAcc', 'battleend' , 'friendReq' , 'friendReqAcc' ,'vote' ,'dislike'  ] , required:true},
     status:{type:String ,  enum:['toShow' , 'viewed'] , default:'toShow' },
     memeid:{type: mongoose.Schema.Types.ObjectId , ref: "Meme" },
     battleid:{type: mongoose.Schema.Types.ObjectId , ref: "Battle" },
@@ -29,7 +29,7 @@ const Notification = models.Notification || model('Notification' , notifiSchema)
 export const setnotifi = async (
     touser: String,
     auser: String,
-    type: 'like' | 'comment' | 'challengeReq' | 'challengeAcc' | 'battleend' | 'friendReq' | 'friendReqAcc' |'vote' ,
+    type: 'like' | 'comment' | 'challengeReq' | 'challengeAcc' | 'battleend' | 'friendReq' | 'friendReqAcc' |'vote' | 'dislike' ,
     id?: String
 ) => {
     try {
@@ -79,6 +79,11 @@ export const setnotifi = async (
             if (!id) return new NextResponse("friendReqid required", {status:400})
             body = `${username} voted for you.`
             notification.battleid = id
+        }else if (type ==="dislike") {
+            if (!id) return new NextResponse("friendReqid required", {status:400})
+            body = `${username} disliked your meme.`
+            notification.memeid= id
+           
         }
 
         notification.body = body

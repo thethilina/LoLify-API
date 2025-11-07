@@ -77,7 +77,7 @@ export const GET = async (request:Request) => {
     try {
         const {searchParams} = new URL(request.url);
         const userId = searchParams.get("userId");
-
+        const loggeduserid = request.headers.get("loggeduserid");
         if(!userId){
             return new NextResponse(
                 JSON.stringify({message:"Invalid userId"}),{status:400}
@@ -89,7 +89,10 @@ export const GET = async (request:Request) => {
                 JSON.stringify({message:"User Not Found!"}),{status:404}
             );
         }
-        
+           if(userId !== loggeduserid){
+            return new NextResponse(JSON.stringify({message:"access denied!"}),{status:400}
+            );
+        }
 
         await connect();
 

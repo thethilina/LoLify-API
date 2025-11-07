@@ -121,6 +121,14 @@ if(!touser){
     return new NextResponse(JSON.stringify({message:"touser not found"}) , {status:404})
 }
 
+const byuserfrnds = byuser.friends
+
+if(byuserfrnds.includes(touserId)){
+ return new NextResponse(JSON.stringify({message:"Already Friends"}) , {status:400})
+}
+
+
+
 
 const friendreq = await Frequest.findOne(
      {

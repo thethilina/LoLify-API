@@ -12,7 +12,7 @@ const userSchema = new Schema (
     orbs : {type: Number , required: true},
     friends :[{type: mongoose.Schema.Types.ObjectId , ref: "User" } ],
 //uttoo ! i add the status here for make change for reported user
-    status : {type:String , default:"active"}
+    status : {type:String , enum:["active","banned"],default:"active"}
 
 
 
