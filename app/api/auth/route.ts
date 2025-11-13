@@ -43,7 +43,7 @@ if (!secret) {
 const payload = {id: user._id.toString() , email : user.email}
 const token = jwt.sign(payload , secret , {expiresIn : "7d"});
 
-const res = NextResponse.json({message:"loging successful"});
+const res = NextResponse.json({user:user});
 
 res.cookies.set({
 name: "token",
