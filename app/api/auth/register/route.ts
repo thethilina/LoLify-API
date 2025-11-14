@@ -24,6 +24,7 @@ return new NextResponse(JSON.stringify({message:"User Created  succesfully !" , 
 
 }catch(e:any){
 
+console.log(e.message)    
 return new NextResponse(JSON.stringify("error creating user" + e.message) , {status : 500});
 
 
