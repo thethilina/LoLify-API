@@ -45,16 +45,20 @@ const token = jwt.sign(payload , secret , {expiresIn : "7d"});
 
 const res = NextResponse.json({user:user});
 
-res.cookies.set({
-name: "token",
-value : token,
-httpOnly: true , 
-path : "/",
-secure: process.env.NODE_ENV === "production",
-sameSite: "lax",
-expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 
-})
+
+res.cookies.set({
+  name: "token",
+  value: token,
+  httpOnly: true,  // you can keep this for security
+  path: "/",
+  secure: false,   // must be false on localhost
+  sameSite: "lax", // works on localhost
+  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+});
+
+
+
 
 return res;
 

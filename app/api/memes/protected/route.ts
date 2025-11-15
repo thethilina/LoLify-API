@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";   
+import { NextRequest, NextResponse } from "next/server";   
 import mongoose from "mongoose";
 import Meme from "@/lib/models/meme";
 import User from "@/lib/models/users";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
+import jwt from "jsonwebtoken";
 
 
 
@@ -61,55 +62,78 @@ return new NextResponse(JSON.stringify(memes) , {status:200})
 
 
 
+const addCorsHeaders = (res: NextResponse) => {
+  res.headers.set("Access-Control-Allow-Origin", "http://localhost:3001");
+  res.headers.set("Access-Control-Allow-Credentials", "true");
+  return res;
+};
+
+// Handle OPTIONS preflight
+export const OPTIONS = () => {
+  const res = NextResponse.json({}, { status: 204 });
+  res.headers.set("Access-Control-Allow-Origin", "http://localhost:3001");
+  res.headers.set("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS");
+  res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  res.headers.set("Access-Control-Allow-Credentials", "true");
+  return res;
+};
+
+// Helper: get logged in user id from JWT cookie
+const getLoggedUserId = (req: NextRequest) => {
+  const token = req.cookies.get("token")?.value;
+  if (!token) return null;
+
+  try {
+    const secret = process.env.JWT_SECRET!;
+    const decoded = jwt.verify(token, secret) as { id: string };
+    return decoded.id;
+  } catch {
+    return null;
+  }
+};
+
+// POST /api/memes/protected
+export const POST = async (req: NextRequest) => {
+  try {
+    const loggedUserId = getLoggedUserId(req);
+    if (!loggedUserId) {
+      const res = NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return addCorsHeaders(res);
+    }
+
+    const body = await req.json();
+    const { userid } = body;
+
+    if (!body) {
+      const res = NextResponse.json({ message: "Body not found" }, { status: 400 });
+      return addCorsHeaders(res);
+    }
+
+    if (userid !== loggedUserId) {
+      const res = NextResponse.json(
+        { message: "Cannot post meme for another user" },
+        { status: 403 }
+      );
+      return addCorsHeaders(res);
+    }
+
+    await connect();
+    const newMeme = new Meme(body);
+    await newMeme.save();
+
+    const res = NextResponse.json(
+      { message: "Meme posted successfully!", meme: newMeme },
+      { status: 200 }
+    );
+    return addCorsHeaders(res);
+  } catch (e: any) {
+    const res = NextResponse.json({ message: "Error posting meme", error: e.message }, { status: 500 });
+    return addCorsHeaders(res);
+  }
+};
 
 
 
-
-
-export const POST = async (request : Request)=>{
-
-try{
-
-const {searchParams} = new URL(request.url);
-const loggeduserid = request.headers.get("loggeduserid")
-
-
-
-await connect();
-
-
-
-const body = await request.json();
-const {userid} = body;
-
-if(!body){
- return new NextResponse('Body not found' , {status:400})
-}
-
-if(userid !== loggeduserid){
- return new NextResponse('why the fuck u are trying to access another users ' , {status:404})
-}
-
-const newMeme = new Meme(body);
-
-await newMeme.save();
-
-if(!newMeme){
- return new NextResponse('Error posting meme' , {status:400})
-}
-
-return new NextResponse(JSON.stringify({message:"Meme posted successfully!" , meme : newMeme  } ) , {status : 200})
-
-}catch(e:any){
-
- return new NextResponse('Error posting meme' + e.message , {status:500})
-
-}
-
-
-
-
-}
 
 
 export const PATCH = async (request : Request ) =>{
