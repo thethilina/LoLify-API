@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://localhost:3001", // or your frontend domain
+            value: "https://lolify.vercel.app", // or your frontend domain
           },
           {
             key: "Access-Control-Allow-Methods",
