@@ -6,7 +6,7 @@ import connect from "@/lib/db";
 import { Types } from "mongoose";
 import { setnotifi } from "@/lib/models/notifications";
 
-export const PATCH = async(request : Request) => {
+export const POST = async(request : Request) => {
 
 try{
 

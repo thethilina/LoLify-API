@@ -22,7 +22,13 @@ await connect();
 
 const  skip = (page - 1) * limit;
 
-const memes = await Meme.find().skip(skip).limit(limit);
+
+const memes = await Meme.find()
+  .sort({ createdAt: -1 })
+  .skip(skip)
+  .limit(limit)
+  .lean();
+  
 return new NextResponse(JSON.stringify(memes) , {status:200})
 
 

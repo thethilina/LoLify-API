@@ -5,7 +5,7 @@ import User from "@/lib/models/users";
 import connect from "@/lib/db";  
 import { Types } from "mongoose";
 
-export const PATCH = async(request : Request) => {
+export const POST = async(request : Request) => {
 
 try{
 
