@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
     res.headers.set("loggeduserid", decoded.id);
     
-    res.headers.set("Access-Control-Allow-Origin", "http://localhost:3001");
+    res.headers.set("Access-Control-Allow-Origin", "https://lolify.vercel.app");
     res.headers.set("Access-Control-Allow-Credentials", "true");
 
     return res;
