@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export async function middleware(req: NextRequest) {
 
   const resHeaders = new Headers();
-  resHeaders.set("Access-Control-Allow-Origin", "http://localhost:3001"); 
+  resHeaders.set("Access-Control-Allow-Origin", "https://lolify.vercel.app"); 
   resHeaders.set("Access-Control-Allow-Credentials", "true");
   resHeaders.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
   resHeaders.set(
