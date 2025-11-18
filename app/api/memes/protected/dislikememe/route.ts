@@ -49,10 +49,9 @@ if(!user){
     return new NextResponse(JSON.stringify({message:"user not found"}) , {status:404})
 }
 
-const alreadyLiked = meme.likecount.includes(userId);
 const alreadyDisLiked = meme.dislikecount.includes(userId);
 
-if (alreadyLiked || alreadyDisLiked) {
+if ( alreadyDisLiked) {
     return new NextResponse(JSON.stringify({message:"Already Reacted"}) , {status:400})
 }
 
