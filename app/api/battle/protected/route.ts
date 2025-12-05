@@ -13,7 +13,6 @@ try {
     const {searchParams} = new URL(request.url);
     const battlerequestid = searchParams.get("battlerequestid");
     const loggeduserid = request.headers.get("loggeduserid");
-
     if(!battlerequestid || battlerequestid === ""){
         return new NextResponse(
             JSON.stringify({message:"Not a valid battle request! "}),{status:400}

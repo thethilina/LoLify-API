@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export async function middleware(req: NextRequest) {
 
   const resHeaders = new Headers();
-  resHeaders.set("Access-Control-Allow-Origin", "https://lolify.vercel.app"); 
+  resHeaders.set("Access-Control-Allow-Origin", "http://localhost:3001"); 
   resHeaders.set("Access-Control-Allow-Credentials", "true");
   resHeaders.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
   resHeaders.set(
@@ -17,6 +17,10 @@ export async function middleware(req: NextRequest) {
       status: 204,
       headers: resHeaders,
     });
+  }
+  //skipping authentications for public GET battle(utto i add this here)
+  if(req.nextUrl.pathname.startsWith("/api/battle/User") && req.method === "GET"){
+    return NextResponse.next();
   }
 
   const token = req.cookies.get("token")?.value;
@@ -34,7 +38,7 @@ export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
     res.headers.set("loggeduserid", decoded.id);
     
-    res.headers.set("Access-Control-Allow-Origin", "https://lolify.vercel.app");
+    res.headers.set("Access-Control-Allow-Origin", "http://localhost:3001");
     res.headers.set("Access-Control-Allow-Credentials", "true");
 
     return res;
