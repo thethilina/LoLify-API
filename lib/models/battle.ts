@@ -1,4 +1,7 @@
 import {Schema,models,model, SchemaType} from "mongoose";
+import User from "./users";
+
+
 
 const battleSchema = new Schema(
     {
