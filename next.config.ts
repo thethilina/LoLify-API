@@ -1,4 +1,3 @@
-// next.config.mjs or next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -8,7 +7,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Apply headers to all routes
         source: "/(.*)",
         headers: [
           {
@@ -17,7 +15,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://lolify.vercel.app", // or your frontend domain
+            value: "http://localhost:3001", 
           },
           {
             key: "Access-Control-Allow-Methods",
