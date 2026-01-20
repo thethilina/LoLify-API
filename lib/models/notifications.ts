@@ -3,6 +3,7 @@ import connect from "../db";
 import { NextResponse } from "next/server";
 import User from "./users";
 import Meme from "./meme";
+import Frequest from "./FriendRequest";
 
 
 const notifiSchema = new Schema(
@@ -14,7 +15,7 @@ const notifiSchema = new Schema(
     memeid:{type: mongoose.Schema.Types.ObjectId , ref: "Meme" },
     battleid:{type: mongoose.Schema.Types.ObjectId , ref: "Battle" },
     challengeReqid:{type: mongoose.Schema.Types.ObjectId , ref: "ChallengeRequest" },
-    friendReqid:{type: mongoose.Schema.Types.ObjectId , ref: "FriendRequest" },
+    friendReqid: { type: mongoose.Schema.Types.ObjectId, ref: "Frequest" },
     body:{type:String , required:true}
 },
 {
