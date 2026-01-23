@@ -63,13 +63,14 @@ userId,
 )
 
 if (!updatedUser) {
-      return new NextResponse(JSON.stringify({ message: "User not found" }), {
-        status: 404,
-      });
-    }
+  return NextResponse.json(
+    { message: "User not found" },
+    { status: 404 }
+  );
+}
 
+return NextResponse.json(updatedUser, { status: 200 });
 
-return  new NextResponse(`${fieldToEdit} updated succesfully` , {status : 200});
 
 
 }catch(e:any){
