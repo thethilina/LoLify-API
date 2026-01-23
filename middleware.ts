@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export async function middleware(req: NextRequest) {
 
   const resHeaders = new Headers();
-  resHeaders.set("Access-Control-Allow-Origin", "http://localhost:3001"); 
+  resHeaders.set("Access-Control-Allow-Origin", process.env.FRONTEND_ORIGIN!); 
   resHeaders.set("Access-Control-Allow-Credentials", "true");
   resHeaders.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
   resHeaders.set(
@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
     res.headers.set("loggeduserid", decoded.id);
     
-    res.headers.set("Access-Control-Allow-Origin", "http://localhost:3001");
+    res.headers.set("Access-Control-Allow-Origin", process.env.FRONTEND_ORIGIN!);
     res.headers.set("Access-Control-Allow-Credentials", "true");
 
     return res;

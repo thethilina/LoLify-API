@@ -13,7 +13,7 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://localhost:3001",
+            value: process.env.FRONTEND_ORIGIN!,
           },
           {
             key: "Access-Control-Allow-Methods",
