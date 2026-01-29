@@ -43,7 +43,7 @@ await connect();
 
 const friendrequests = await Frequest.find(
     {touserid : userId}
-)
+).populate("byuserid", "username email avatar");
 
 if(!friendrequests || friendrequests.length === 0) {
     return new NextResponse(JSON.stringify({message:"No requests to show"}) ,{status:202})
@@ -67,8 +67,9 @@ try{
 
 
 const {searchParams} = new URL(request.url);
-const byuserId = searchParams.get("byuserId");
-const touserId = searchParams.get("touserId")
+const byuserId = searchParams.get("byuserid");
+const touserId = searchParams.get("touserid");
+
 const loggeduserid = request.headers.get("loggeduserid")
 
 if (!byuserId) {
@@ -85,7 +86,11 @@ if(!Types.ObjectId.isValid(byuserId)){
 }
 
 if(byuserId !== loggeduserid){
- return new NextResponse('why the fuck u are trying to access another users ' , {status:404})
+return new NextResponse(
+  JSON.stringify({ message: "Unauthorized access" }),
+  { status: 404 }
+)
+
 }
 
 

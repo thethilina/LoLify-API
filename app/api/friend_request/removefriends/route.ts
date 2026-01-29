@@ -61,24 +61,28 @@ if(!usertoremove){
     return new NextResponse(JSON.stringify({message:"usertoremove not found"}) , {status:404})
 }
 
+console.log("user friends:", user.friends);
+console.log("usertoremoveId:", usertoremoveId);
 
 const updateduser = await User.findByIdAndUpdate(
-userId,
-{$pull: {friends: usertoremoveId}},
-{new:true}
+  userId,
+  { $pull: { friends: new mongoose.Types.ObjectId(usertoremoveId) } },
+  { new: true }
+).select("-password   -createdAt -updatedAt -__v");
 
-)
+const updated2nduser = await User.findByIdAndUpdate(
+  usertoremoveId,
+  { $pull: { friends: new mongoose.Types.ObjectId(userId) } },
+  { new: true }
+).select("-password   -createdAt -updatedAt -__v");
+
+
 
 if(!updateduser){
     return new NextResponse(JSON.stringify({message:"Error removing friend"} ) , {status:400})
 }
 
-const updated2nduser = await User.findByIdAndUpdate(
-usertoremoveId,
-{$pull: {friends: userId}},
-{new:true}
 
-)
 
 
 if(!updated2nduser){

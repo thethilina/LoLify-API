@@ -22,7 +22,7 @@ const  userid = searchParams.get('userid')
 await connect();
 
 
-const user = await User.findById(userid)
+const user = await User.findById(userid).select("-password -email  -createdAt -updatedAt -__v");
 return new NextResponse(JSON.stringify(user) , {status:200})
 
 

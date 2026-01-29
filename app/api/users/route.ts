@@ -1,45 +1,67 @@
 import { NextResponse } from "next/server";
 import connect from "@/lib/db";
 import User from "@/lib/models/users";
-import { request } from "http";
+import Frequest from "@/lib/models/FriendRequest";
 import mongoose from "mongoose";
 import { Types } from "mongoose";
 
-const ObjectId = require("mongoose").Types.ObjectId;
+export const GET = async (request: Request) => {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
-export const GET = async (request : Request)=> {
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
 
+    if (!userId || !Types.ObjectId.isValid(userId)) {
+      return new NextResponse("Invalid userId", { status: 400 });
+    }
 
-try{
+    await connect();
 
-    const nowUTC = new Date();
-const SL_Time = new Date(nowUTC.getTime() + (5.5 * 60 * 60 * 1000));
+    const skip = (page - 1) * limit;
 
-console.log(SL_Time);
+    const currentUser = await User.findById(userId).select("friends");
 
-const {searchParams} = new URL(request.url);
-const  page : any = parseInt(searchParams.get('page') || "1");
-const  limit : any = parseInt(searchParams.get('limit') || "10");    
+    if (!currentUser) {
+      return new NextResponse("User not found", { status: 404 });
+    }
 
+    const requests = await Frequest.find({
+      $or: [
+        { byuserid: userId },
+        { touserid: userId },
+      ],
+    }).select("byuserid touserid");
 
+    const excludedIds = new Set<string>();
 
-await connect();
+    excludedIds.add(userId);
 
-const  skip = (page - 1) * limit;
+    
+    currentUser.friends.forEach((id: any) =>
+      excludedIds.add(id.toString())
+    );
 
-const users = await User.find().skip(skip).limit(limit);
-return new NextResponse(JSON.stringify(users) , {status:200})
+    requests.forEach((req) => {
+      excludedIds.add(req.byuserid.toString());
+      excludedIds.add(req.touserid.toString());
+    });
 
+    const users = await User.find({
+      _id: { $nin: Array.from(excludedIds) },
+      status: "active",
+    })
+      .skip(skip)
+      .limit(limit)
+      .select("-password -email -friends -createdAt -updatedAt -__v");
 
-}catch(e:any){
+    return NextResponse.json(users, { status: 200 });
 
-    return new NextResponse("Error in fetching users" +e.message , {status:500});
-
-}
-
-
-
-}
-
-
-
+  } catch (e: any) {
+    return new NextResponse(
+      "Error fetching users: " + e.message,
+      { status: 500 }
+    );
+  }
+};
